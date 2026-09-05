@@ -1,0 +1,12 @@
+[
+  {
+    "id": "coworking",
+    "label": "Coworking",
+    "icon": "🏢"
+  },
+  {
+    "id": "cafe",
+    "label": "Café-coworking",
+    "icon": "☕"
+  }
+]

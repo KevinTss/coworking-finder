@@ -1,0 +1,114 @@
+[
+  {
+    "id": "hiptown-part-dieu-day",
+    "place_id": "hiptown-part-dieu",
+    "label": "Hiptown Days",
+    "price": 18,
+    "unit": "day"
+  },
+  {
+    "id": "hiptown-part-dieu-month",
+    "place_id": "hiptown-part-dieu",
+    "label": "Coworking nomade",
+    "price": 180,
+    "unit": "month"
+  },
+  {
+    "id": "mama-works-hour",
+    "place_id": "mama-works-lyon",
+    "label": "Mama mobile hourly",
+    "price": 5,
+    "unit": "hour"
+  },
+  {
+    "id": "mama-works-half-time",
+    "place_id": "mama-works-lyon",
+    "label": "Mama mobile half-time",
+    "price": 149,
+    "unit": "month"
+  },
+  {
+    "id": "mama-works-full-time",
+    "place_id": "mama-works-lyon",
+    "label": "Mama mobile full-time",
+    "price": 219,
+    "unit": "month"
+  },
+  {
+    "id": "mama-works-dedicated",
+    "place_id": "mama-works-lyon",
+    "label": "Mama desk",
+    "price": 340,
+    "unit": "month"
+  },
+  {
+    "id": "wojo-part-dieu-half-day",
+    "place_id": "wojo-part-dieu",
+    "label": "Half-day pass",
+    "price": 17,
+    "unit": "half_day"
+  },
+  {
+    "id": "wojo-part-dieu-day",
+    "place_id": "wojo-part-dieu",
+    "label": "Day pass",
+    "price": 27,
+    "unit": "day"
+  },
+  {
+    "id": "la-cordee-liberte-balade-fixed",
+    "place_id": "la-cordee-liberte-guillotiere",
+    "label": "Balade fixed monthly fee",
+    "price": 35,
+    "unit": "month"
+  },
+  {
+    "id": "la-cordee-liberte-balade-hour",
+    "place_id": "la-cordee-liberte-guillotiere",
+    "label": "Balade hourly presence",
+    "price": 3.25,
+    "unit": "hour"
+  },
+  {
+    "id": "la-cordee-liberte-trail",
+    "place_id": "la-cordee-liberte-guillotiere",
+    "label": "Trail unlimited",
+    "price": 249,
+    "unit": "month"
+  },
+  {
+    "id": "la-cordee-jean-mace-balade-fixed",
+    "place_id": "la-cordee-jean-mace",
+    "label": "Balade fixed monthly fee",
+    "price": 35,
+    "unit": "month"
+  },
+  {
+    "id": "la-cordee-jean-mace-balade-hour",
+    "place_id": "la-cordee-jean-mace",
+    "label": "Balade hourly presence",
+    "price": 3.25,
+    "unit": "hour"
+  },
+  {
+    "id": "la-cordee-jean-mace-trail",
+    "place_id": "la-cordee-jean-mace",
+    "label": "Trail unlimited",
+    "price": 249,
+    "unit": "month"
+  },
+  {
+    "id": "sofffa-terreaux-hour",
+    "place_id": "sofffa-terreaux",
+    "label": "First hour",
+    "price": 6,
+    "unit": "hour"
+  },
+  {
+    "id": "sofffa-terreaux-day",
+    "place_id": "sofffa-terreaux",
+    "label": "Day pass",
+    "price": 24,
+    "unit": "day"
+  }
+]

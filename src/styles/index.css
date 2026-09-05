@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: #fafafa;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: #99f6e4;
+  color: #134e4a;
+}
+
+.maplibregl-ctrl button {
+  border-radius: 6px;
+}
+
+.map-marker {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  background: #18181b;
+  border: 2px solid #ffffff;
+  border-radius: 9999px;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.map-marker[data-active="true"] {
+  background: #0f766e;
+  transform: scale(1.12);
+}
+
+.map-marker__dot {
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
+  border-radius: 9999px;
+}
+
+.map-price-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 32px;
+  padding: 0 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #18181b;
+  background: #ffffff;
+  border: 1px solid rgba(24, 24, 27, 0.16);
+  border-radius: 9999px;
+  box-shadow: 0 6px 18px rgba(24, 24, 27, 0.2);
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.map-price-marker[data-active="true"] {
+  color: #ffffff;
+  background: #18181b;
+  transform: scale(1.08);
+}

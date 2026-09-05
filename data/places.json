@@ -1,0 +1,93 @@
+[
+  {
+    "id": "hiptown-part-dieu",
+    "city_id": "lyon",
+    "name": "Hiptown Part-Dieu Britannia Campus",
+    "type_id": "coworking",
+    "address": "20 boulevard Eugene Deruelle, 69003 Lyon",
+    "lat": 45.7626,
+    "lng": 4.858,
+    "website_url": "https://hiptown.com/nos-espaces-coworking/hiptown-lyon-britannia-bat-c/",
+    "price_monthly_estimate": 180,
+    "price_currency": "EUR",
+    "notes": "Monthly estimate uses Hiptown's published coworking nomade price from 180 EUR HT/month/poste."
+  },
+  {
+    "id": "mama-works-lyon",
+    "city_id": "lyon",
+    "name": "Mama Works Lyon",
+    "type_id": "coworking",
+    "address": "92 cours Lafayette, 69003 Lyon",
+    "lat": 45.76289,
+    "lng": 4.84938,
+    "website_url": "https://mamaworks.com/coworking-lyon/",
+    "price_monthly_estimate": 219,
+    "price_currency": "EUR",
+    "notes": "Monthly estimate uses Mama Works' published full-time Mama mobile rate from 219 EUR HT/month."
+  },
+  {
+    "id": "wojo-part-dieu",
+    "city_id": "lyon",
+    "name": "Wojo Lyon 3e Part-Dieu",
+    "type_id": "coworking",
+    "address": "15 rue des Cuirassiers, 69003 Lyon",
+    "lat": 45.75939,
+    "lng": 4.85603,
+    "website_url": "https://www.wojo.com/fr-FR/service/wojo-coworking/europe/france/auvergne-rhone-alpes/lyon/lyon-3e/lyon-3e-part-dieu/wojo-lyon-3e-part-dieu/espace-de-coworking",
+    "price_monthly_estimate": null,
+    "price_currency": "EUR",
+    "notes": "This venue publishes day and half-day passes; monthly pricing is left null here."
+  },
+  {
+    "id": "la-cordee-liberte-guillotiere",
+    "city_id": "lyon",
+    "name": "La Cordée Liberté-Guillotière",
+    "type_id": "coworking",
+    "address": "61 cours de la Liberte, 69003 Lyon",
+    "lat": 45.756,
+    "lng": 4.8405,
+    "website_url": "https://www.la-cordee.net/cordee/lyon/lyon/",
+    "price_monthly_estimate": null,
+    "price_currency": "EUR",
+    "notes": "La Cordee uses formula-based pricing, so offers are captured separately instead of inventing one monthly equivalent."
+  },
+  {
+    "id": "la-cordee-jean-mace",
+    "city_id": "lyon",
+    "name": "La Cordée Jean Macé",
+    "type_id": "coworking",
+    "address": "19 rue Pere Chevrier, 69007 Lyon",
+    "lat": 45.7487,
+    "lng": 4.8429,
+    "website_url": "https://www.la-cordee.net/cordee/lyon/lyon/",
+    "price_monthly_estimate": null,
+    "price_currency": "EUR",
+    "notes": "La Cordee uses formula-based pricing, so offers are captured separately instead of inventing one monthly equivalent."
+  },
+  {
+    "id": "sofffa-terreaux",
+    "city_id": "lyon",
+    "name": "Sofffa Terreaux",
+    "type_id": "cafe",
+    "address": "17 rue Sainte-Catherine, 69001 Lyon",
+    "lat": 45.76827,
+    "lng": 4.83392,
+    "website_url": "https://sofffa.com/",
+    "price_monthly_estimate": null,
+    "price_currency": "EUR",
+    "notes": "Slow-cafe pricing is modeled through offers. Verify current rates before relying on them operationally."
+  },
+  {
+    "id": "patchwork-cafe",
+    "city_id": "lyon",
+    "name": "Patchwork Café",
+    "type_id": "cafe",
+    "address": "146 cours Gambetta, 69007 Lyon",
+    "lat": 45.7499,
+    "lng": 4.8537,
+    "website_url": "https://www.patchwork-cafe.com/",
+    "price_monthly_estimate": null,
+    "price_currency": "EUR",
+    "notes": "Cafe-friendly workspace entry. No structured coworking offer has been captured yet."
+  }
+]

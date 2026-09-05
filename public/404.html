@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coworking Finder</title>
+  </head>
+  <body>
+    <script>
+      (function redirectToSpa(location) {
+        var segmentsToKeep = location.hostname.endsWith("github.io") ? 1 : 0;
+        var segments = location.pathname.split("/").filter(Boolean);
+        var base = segments.slice(0, segmentsToKeep).join("/");
+        var route = segments.slice(segmentsToKeep).join("/");
+        var query = location.search ? "&" + location.search.slice(1) : "";
+        var target =
+          location.protocol +
+          "//" +
+          location.hostname +
+          (location.port ? ":" + location.port : "") +
+          "/" +
+          (base ? base + "/" : "") +
+          "?/" +
+          route +
+          query +
+          location.hash;
+
+        location.replace(target);
+      })(window.location);
+    </script>
+  </body>
+</html>

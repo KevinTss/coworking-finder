@@ -1,0 +1,10 @@
+[
+  {
+    "id": "lyon",
+    "name": "Lyon",
+    "country": "FR",
+    "lat": 45.764,
+    "lng": 4.8357,
+    "default_zoom": 12
+  }
+]
