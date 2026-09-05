@@ -1,6 +1,6 @@
-import { CheckCircle2, ChevronDown, ExternalLink, Star } from "lucide-react";
+import { ChevronDown, ExternalLink, Star } from "lucide-react";
 
-import { formatPlacePrice } from "../lib/loadData";
+import { formatPlacePriceForUnit, type PriceUnit } from "../lib/loadData";
 import type { EnrichedPlace } from "../lib/types";
 import { PlaceDetail } from "./PlaceDetail";
 
@@ -8,6 +8,7 @@ interface PlaceRowProps {
   isOpen: boolean;
   onToggle: () => void;
   place: EnrichedPlace;
+  priceUnit: PriceUnit;
 }
 
 function getZone(address: string) {
@@ -24,7 +25,7 @@ function getZone(address: string) {
   return `Lyon ${Number(postalCode.slice(-2))}`;
 }
 
-export function PlaceRow({ isOpen, onToggle, place }: PlaceRowProps) {
+export function PlaceRow({ isOpen, onToggle, place, priceUnit }: PlaceRowProps) {
   const typeTone =
     place.type.id === "cafe"
       ? "border-amber-200 bg-amber-50 text-amber-800"
@@ -49,7 +50,7 @@ export function PlaceRow({ isOpen, onToggle, place }: PlaceRowProps) {
 
         <span className="text-sm text-zinc-600">{getZone(place.address)}</span>
 
-        <span className="text-sm font-medium text-zinc-900">{formatPlacePrice(place)}</span>
+        <span className="text-sm font-medium text-zinc-900">{formatPlacePriceForUnit(place, priceUnit)}</span>
 
         <span className="flex items-center gap-2 text-sm text-zinc-600">
           {place.averageRating ? (
@@ -65,7 +66,6 @@ export function PlaceRow({ isOpen, onToggle, place }: PlaceRowProps) {
         <span className="flex items-center justify-between gap-2 md:justify-end">
           <span className="flex gap-1 text-zinc-400">
             {place.website_url ? <ExternalLink aria-label="Has website" className="h-4 w-4" /> : null}
-            {place.reviews.length ? <CheckCircle2 aria-label="Tested" className="h-4 w-4 text-accent" /> : null}
           </span>
           <ChevronDown
             aria-hidden="true"

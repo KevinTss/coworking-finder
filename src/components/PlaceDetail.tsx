@@ -43,29 +43,6 @@ export function PlaceDetail({ place }: PlaceDetailProps) {
             </p>
           )}
         </section>
-
-        <section aria-labelledby={`${place.id}-reviews`}>
-          <h3 className="text-sm font-semibold text-zinc-950" id={`${place.id}-reviews`}>
-            Tested by
-          </h3>
-          {place.reviews.length ? (
-            <ul className="mt-2 space-y-2">
-              {place.reviews.map((review) => (
-                <li className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm" key={review.id}>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-medium text-zinc-950">{review.tester_name}</span>
-                    <span className="text-zinc-500">{review.rating ? `${review.rating}/5` : review.date}</span>
-                  </div>
-                  <p className="mt-1 leading-6 text-zinc-600">{review.comment}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-500">
-              No tested-by review yet.
-            </p>
-          )}
-        </section>
       </div>
 
       <div className="flex min-w-0 flex-col gap-3">

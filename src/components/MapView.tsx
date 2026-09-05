@@ -4,16 +4,17 @@ import { ExternalLink, MapPin, Star } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from "maplibre-gl";
 
-import { formatOfferPrice, formatPlacePrice } from "../lib/loadData";
+import { formatOfferPrice, formatPlacePriceForUnit, type PriceUnit } from "../lib/loadData";
 import { getMapsUrl, osmRasterStyle } from "../lib/maps";
 import type { City, EnrichedPlace } from "../lib/types";
 
 interface MapViewProps {
   city: City;
   places: EnrichedPlace[];
+  priceUnit: PriceUnit;
 }
 
-export function MapView({ city, places }: MapViewProps) {
+export function MapView({ city, places, priceUnit }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<MapLibreMap | null>(null);
   const markerElementsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
@@ -163,7 +164,7 @@ export function MapView({ city, places }: MapViewProps) {
                   </span>
                 </span>
                 <span className={`truncate text-sm ${active ? "text-zinc-300" : "text-zinc-500"}`}>
-                  {formatPlacePrice(place)}
+                  {formatPlacePriceForUnit(place, priceUnit)}
                 </span>
               </button>
             );
@@ -178,7 +179,9 @@ export function MapView({ city, places }: MapViewProps) {
               </span>
               <h2 className="mt-3 text-lg font-semibold text-zinc-950">{selectedPlace.name}</h2>
               <p className="mt-1 text-sm leading-6 text-zinc-500">{selectedPlace.address}</p>
-              <p className="mt-3 text-sm font-medium text-zinc-950">{formatPlacePrice(selectedPlace)}</p>
+              <p className="mt-3 text-sm font-medium text-zinc-950">
+                {formatPlacePriceForUnit(selectedPlace, priceUnit)}
+              </p>
               <p className="mt-2 flex items-center gap-2 text-sm text-zinc-600">
                 {selectedPlace.averageRating ? (
                   <>

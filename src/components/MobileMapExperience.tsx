@@ -5,7 +5,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from "maplibre-gl";
 
-import { formatOfferPrice, formatPlacePrice } from "../lib/loadData";
+import {
+  formatOfferPrice,
+  formatPlacePriceForUnit,
+  getPlacePriceForUnit,
+  type PriceUnit
+} from "../lib/loadData";
 import { getMapsUrl, osmRasterStyle } from "../lib/maps";
 import type { City, EnrichedPlace } from "../lib/types";
 
@@ -14,6 +19,7 @@ interface MobileMapExperienceProps {
   city: City;
   onFilterClick: () => void;
   places: EnrichedPlace[];
+  priceUnit: PriceUnit;
   siteTitle: string;
   totalCount: number;
 }
@@ -21,8 +27,8 @@ interface MobileMapExperienceProps {
 const minSheetHeight = 210;
 const maxSheetRatio = 0.72;
 
-function getMarkerLabel(place: EnrichedPlace) {
-  const price = place.priceForFilter;
+function getMarkerLabel(place: EnrichedPlace, priceUnit: PriceUnit) {
+  const price = getPlacePriceForUnit(place, priceUnit);
 
   if (typeof price !== "number") {
     return place.type.icon;
@@ -36,6 +42,7 @@ export function MobileMapExperience({
   city,
   onFilterClick,
   places,
+  priceUnit,
   siteTitle,
   totalCount
 }: MobileMapExperienceProps) {
@@ -102,7 +109,7 @@ export function MobileMapExperience({
         markerElement.className = "map-price-marker";
         markerElement.ariaLabel = `Show ${place.name}`;
         markerElement.dataset.active = place.id === selectedPlaceId ? "true" : "false";
-        markerElement.textContent = getMarkerLabel(place);
+        markerElement.textContent = getMarkerLabel(place, priceUnit);
         markerElement.addEventListener("click", () => setSelectedPlaceId(place.id));
         markerElementsRef.current.set(place.id, markerElement);
 
@@ -137,7 +144,7 @@ export function MobileMapExperience({
       }
       markerElementsRef.current.clear();
     };
-  }, [city.default_zoom, city.id, city.lat, city.lng, places]);
+  }, [city.default_zoom, city.id, city.lat, city.lng, places, priceUnit]);
 
   useEffect(() => {
     markerElementsRef.current.forEach((element, placeId) => {
@@ -194,7 +201,11 @@ export function MobileMapExperience({
           </h1>
           <button
             aria-label="Open filters"
-            className="relative inline-grid h-10 w-10 shrink-0 place-items-center rounded-md border border-zinc-200 bg-white text-zinc-950"
+            className={`relative inline-grid h-10 w-10 shrink-0 place-items-center rounded-md border border-transparent transition ${
+              activeFilterCount > 0
+                ? "bg-teal-50 text-accent"
+                : "bg-transparent text-zinc-500 active:bg-zinc-100"
+            }`}
             onClick={onFilterClick}
             type="button"
           >
@@ -248,7 +259,7 @@ export function MobileMapExperience({
                       </span>
                     </span>
                     <span className="line-clamp-2 text-sm leading-5 text-zinc-500">{place.address}</span>
-                    <span className="text-sm font-medium text-zinc-950">{formatPlacePrice(place)}</span>
+                    <span className="text-sm font-medium text-zinc-950">{formatPlacePriceForUnit(place, priceUnit)}</span>
                   </button>
                 ))}
               </div>
@@ -261,13 +272,21 @@ export function MobileMapExperience({
           </div>
         </section>
       ) : (
-        <SelectedPlaceCard place={selectedPlace} onClose={() => setSelectedPlaceId(null)} />
+        <SelectedPlaceCard place={selectedPlace} priceUnit={priceUnit} onClose={() => setSelectedPlaceId(null)} />
       )}
     </section>
   );
 }
 
-function SelectedPlaceCard({ onClose, place }: { onClose: () => void; place: EnrichedPlace }) {
+function SelectedPlaceCard({
+  onClose,
+  place,
+  priceUnit
+}: {
+  onClose: () => void;
+  place: EnrichedPlace;
+  priceUnit: PriceUnit;
+}) {
   return (
     <article className="absolute inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-[0_18px_60px_rgba(24,24,27,0.2)]">
       <div className="flex items-start justify-between gap-3 p-4">
@@ -277,7 +296,7 @@ function SelectedPlaceCard({ onClose, place }: { onClose: () => void; place: Enr
           </span>
           <h2 className="mt-3 truncate text-lg font-semibold text-zinc-950">{place.name}</h2>
           <p className="mt-1 line-clamp-2 text-sm leading-5 text-zinc-500">{place.address}</p>
-          <p className="mt-3 text-sm font-medium text-zinc-950">{formatPlacePrice(place)}</p>
+          <p className="mt-3 text-sm font-medium text-zinc-950">{formatPlacePriceForUnit(place, priceUnit)}</p>
         </div>
         <button
           aria-label="Close selected place"

@@ -9,6 +9,16 @@ import tags from "../../data/tags.json";
 
 import type { City, DataSet, EnrichedPlace, Offer, Place, PlaceTag, PlaceType, Review, SiteConfig, Tag } from "./types";
 
+export type PriceUnit = Extract<Offer["unit"], "hour" | "day" | "month">;
+
+export const defaultPriceUnit: PriceUnit = "day";
+
+export const priceUnitOptions: Array<{ id: PriceUnit; label: string; shortLabel: string }> = [
+  { id: "hour", label: "Per hour", shortLabel: "Hour" },
+  { id: "day", label: "Per day", shortLabel: "Day" },
+  { id: "month", label: "Per month", shortLabel: "Month" }
+];
+
 function byId<T extends { id: string }>(rows: T[]) {
   return new Map(rows.map((row) => [row.id, row]));
 }
@@ -78,8 +88,7 @@ const enrichedPlaces: EnrichedPlace[] = placeRows.map((place) => {
     reviews: placeReviews,
     tags: placeTagRows,
     averageRating: getAverageRating(placeReviews),
-    cheapestOffer,
-    priceForFilter: cheapestOffer?.price ?? place.price_monthly_estimate
+    cheapestOffer
   };
 });
 
@@ -117,6 +126,44 @@ export function formatOfferUnit(unit: Offer["unit"]) {
 
 export function formatOfferPrice(offer: Offer, currency = "EUR") {
   return `${formatCurrency(offer.price, currency)} ${formatOfferUnit(offer.unit)}`;
+}
+
+export function getOfferForUnit(place: EnrichedPlace, unit: PriceUnit) {
+  return [...place.offers].filter((offer) => offer.unit === unit).sort((a, b) => a.price - b.price)[0] ?? null;
+}
+
+export function getPlacePriceForUnit(place: EnrichedPlace, unit: PriceUnit) {
+  const offer = getOfferForUnit(place, unit);
+
+  if (offer) {
+    return offer.price;
+  }
+
+  if (unit === "month" && typeof place.price_monthly_estimate === "number") {
+    return place.price_monthly_estimate;
+  }
+
+  return null;
+}
+
+export function formatPlacePriceForUnit(place: EnrichedPlace, unit: PriceUnit) {
+  const offer = getOfferForUnit(place, unit);
+
+  if (offer) {
+    return formatOfferPrice(offer, place.price_currency);
+  }
+
+  if (unit === "month" && typeof place.price_monthly_estimate === "number") {
+    return `${formatCurrency(place.price_monthly_estimate, place.price_currency)} /month`;
+  }
+
+  const missingLabels: Record<PriceUnit, string> = {
+    day: "No day price",
+    hour: "No hourly price",
+    month: "No monthly price"
+  };
+
+  return missingLabels[unit];
 }
 
 export function formatPlacePrice(place: EnrichedPlace) {

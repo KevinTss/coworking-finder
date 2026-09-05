@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
+import type { PriceUnit } from "../lib/loadData";
 import type { EnrichedPlace } from "../lib/types";
 import { PlaceRow } from "./PlaceRow";
 
 interface PlaceListProps {
   places: EnrichedPlace[];
+  priceUnit: PriceUnit;
 }
 
-export function PlaceList({ places }: PlaceListProps) {
+export function PlaceList({ places, priceUnit }: PlaceListProps) {
   const [openPlaceId, setOpenPlaceId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export function PlaceList({ places }: PlaceListProps) {
             key={place.id}
             onToggle={() => setOpenPlaceId((current) => (current === place.id ? null : place.id))}
             place={place}
+            priceUnit={priceUnit}
           />
         ))}
       </div>

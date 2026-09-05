@@ -75,7 +75,6 @@ export interface EnrichedPlace extends Place {
   reviews: Review[];
   averageRating: number | null;
   cheapestOffer: Offer | null;
-  priceForFilter: number | null;
 }
 
 export interface DataSet {
