@@ -146,8 +146,12 @@ export function CityPage() {
       ) : null}
 
       {!isMobile ? (
-        <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6 py-5 lg:px-8">
-          <header className="grid gap-x-3 gap-y-0 border-b border-zinc-200 pb-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+        <section className={`flex w-full flex-col ${
+          viewMode === "map" ? "gap-0 pb-5" : "mx-auto max-w-7xl gap-4 px-6 py-5 lg:px-8"
+        }`}>
+          <header className={`grid gap-x-3 gap-y-0 border-b border-zinc-200 pb-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
+            viewMode === "map" ? "relative z-30 mx-auto w-full max-w-7xl bg-zinc-50/95 px-6 pt-5 lg:px-8" : ""
+          }`}>
             <h1 className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 text-2xl font-semibold tracking-normal text-zinc-950 lg:text-3xl">
               <span className="whitespace-nowrap">{data.config.siteTitle}</span>
               <span className="text-sm font-medium text-accent">{city.name}, {city.country}</span>

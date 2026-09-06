@@ -235,13 +235,6 @@ export function MobileMapExperience({
             <span className="h-1 w-12 rounded-full bg-zinc-300" />
           </button>
 
-          <div className="border-b border-zinc-100 px-5 pb-3">
-            <h2 className="text-lg font-semibold text-zinc-950">Spaces in {city.name}</h2>
-            {places.length !== totalCount ? (
-              <p className="mt-1 text-sm text-zinc-500">Filtered results</p>
-            ) : null}
-          </div>
-
           <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-[max(18px,env(safe-area-inset-bottom))] pt-4">
             {places.length ? (
               <div className="space-y-4">

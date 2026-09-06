@@ -7,7 +7,7 @@ interface FooterProps {
 
 export function Footer({ config }: FooterProps) {
   return (
-    <footer className="hidden border-t border-zinc-200 bg-white px-4 py-5 text-sm text-zinc-500 sm:px-6 md:block lg:px-8">
+    <footer className="relative z-20 hidden border-t border-zinc-200 bg-white px-4 py-5 text-sm text-zinc-500 sm:px-6 md:block lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <p>
           Built with <span aria-label="love">♥</span> by{" "}
