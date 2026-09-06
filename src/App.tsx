@@ -13,9 +13,9 @@ export default function App() {
       <div className="flex min-h-screen flex-col bg-zinc-50 text-ink">
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={<Navigate to={`/${config.default_city}`} replace />} />
+            <Route path="/" element={<Navigate to={`/${config.defaultCity}`} replace />} />
             <Route path="/:citySlug" element={<CityPage />} />
-            <Route path="*" element={<Navigate to={`/${config.default_city}`} replace />} />
+            <Route path="*" element={<Navigate to={`/${config.defaultCity}`} replace />} />
           </Routes>
         </main>
         <Footer config={config} />

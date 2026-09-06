@@ -2,13 +2,13 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { defaultPriceUnit, formatCurrency, priceUnitOptions, type PriceUnit } from "../lib/loadData";
-import type { PlaceType } from "../lib/types";
+import type { PlaceType, PlaceTypeId } from "../lib/types";
 
 export interface FilterState {
   maxPrice: number;
   priceUnit: PriceUnit;
   query: string;
-  typeId: string;
+  typeId: PlaceTypeId | "all";
 }
 
 interface FilterBarProps {
@@ -50,7 +50,10 @@ export function FilterBar({ filters, layout = "desktop", maxPrice, onChange, pla
     }
   }, [isSearchOpen]);
 
-  const typeOptions = [{ id: "all", label: "All", icon: "" }, ...placeTypes];
+  const typeOptions: Array<{ id: PlaceTypeId | "all"; label: string; icon: string }> = [
+    { id: "all", label: "All", icon: "" },
+    ...placeTypes
+  ];
   const priceStep = filters.priceUnit === "month" ? 25 : 5;
   const selectedMaxPrice = Math.min(filters.maxPrice, maxPrice);
 

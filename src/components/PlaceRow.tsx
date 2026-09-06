@@ -65,7 +65,7 @@ export function PlaceRow({ isOpen, onToggle, place, priceUnit }: PlaceRowProps) 
 
         <span className="flex items-center justify-between gap-2 md:justify-end">
           <span className="flex gap-1 text-zinc-400">
-            {place.website_url ? <ExternalLink aria-label="Has website" className="h-4 w-4" /> : null}
+            {place.websiteUrl ? <ExternalLink aria-label="Has website" className="h-4 w-4" /> : null}
           </span>
           <ChevronDown
             aria-hidden="true"

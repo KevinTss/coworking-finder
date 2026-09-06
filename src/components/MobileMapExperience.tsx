@@ -95,7 +95,7 @@ export function MobileMapExperience({
         container: mapContainerRef.current,
         interactive: true,
         style: osmRasterStyle,
-        zoom: city.default_zoom
+        zoom: city.defaultZoom
       });
       mapInstanceRef.current = map;
 
@@ -144,7 +144,7 @@ export function MobileMapExperience({
       }
       markerElementsRef.current.clear();
     };
-  }, [city.default_zoom, city.id, city.lat, city.lng, places, priceUnit]);
+  }, [city.defaultZoom, city.id, city.lat, city.lng, places, priceUnit]);
 
   useEffect(() => {
     markerElementsRef.current.forEach((element, placeId) => {
@@ -259,6 +259,7 @@ export function MobileMapExperience({
                       </span>
                     </span>
                     <span className="line-clamp-2 text-sm leading-5 text-zinc-500">{place.address}</span>
+                    <span className="text-xs font-medium text-zinc-500">Laptop: {place.laptopPolicy.availability}</span>
                     <span className="text-sm font-medium text-zinc-950">{formatPlacePriceForUnit(place, priceUnit)}</span>
                   </button>
                 ))}
@@ -297,6 +298,7 @@ function SelectedPlaceCard({
           <h2 className="mt-3 truncate text-lg font-semibold text-zinc-950">{place.name}</h2>
           <p className="mt-1 line-clamp-2 text-sm leading-5 text-zinc-500">{place.address}</p>
           <p className="mt-3 text-sm font-medium text-zinc-950">{formatPlacePriceForUnit(place, priceUnit)}</p>
+          <p className="mt-2 text-xs font-medium text-zinc-500">Laptop: {place.laptopPolicy.availability}</p>
         </div>
         <button
           aria-label="Close selected place"
@@ -316,7 +318,7 @@ function SelectedPlaceCard({
                 className="shrink-0 rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-medium text-zinc-700"
                 key={offer.id}
               >
-                {offer.label}: {formatOfferPrice(offer, place.price_currency)}
+                {offer.label}: {formatOfferPrice(offer, place.priceCurrency)}
               </li>
             ))}
           </ul>
@@ -326,7 +328,7 @@ function SelectedPlaceCard({
       <div className="flex gap-2 border-t border-zinc-100 p-3">
         <a
           className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md bg-zinc-950 px-3 text-sm font-medium text-white"
-          href={place.website_url}
+          href={place.websiteUrl}
           rel="noreferrer"
           target="_blank"
         >

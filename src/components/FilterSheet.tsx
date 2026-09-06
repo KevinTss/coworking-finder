@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 
+import { formatLastUpdatedAt } from "../lib/loadData";
 import { FilterBar, type FilterState } from "./FilterBar";
 import type { PlaceType, SiteConfig } from "../lib/types";
 
@@ -81,17 +82,18 @@ export function FilterSheet({
             Made with <span aria-label="love">♥</span> by{" "}
             <a
               className="font-medium text-zinc-950 underline-offset-4 hover:underline"
-              href={config.author.linkedin_url}
+              href={config.author.linkedinUrl}
               rel="noreferrer"
               target="_blank"
             >
               {config.author.name}
             </a>
           </p>
+          <p className="mt-1 text-xs text-zinc-400">Updated {formatLastUpdatedAt(config.lastUpdatedAt)}</p>
           <p className="mt-2 flex justify-center gap-3">
             <a
               className="underline-offset-4 hover:text-zinc-950 hover:underline"
-              href={config.author.linkedin_url}
+              href={config.author.linkedinUrl}
               rel="noreferrer"
               target="_blank"
             >
@@ -99,7 +101,7 @@ export function FilterSheet({
             </a>
             <a
               className="underline-offset-4 hover:text-zinc-950 hover:underline"
-              href={config.author.github_url}
+              href={config.author.githubUrl}
               rel="noreferrer"
               target="_blank"
             >

@@ -55,7 +55,7 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
         container: mapContainerRef.current,
         interactive: true,
         style: osmRasterStyle,
-        zoom: city.default_zoom
+        zoom: city.defaultZoom
       });
       mapInstanceRef.current = map;
 
@@ -105,7 +105,7 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
       }
       markerElementsRef.current.clear();
     };
-  }, [city.default_zoom, city.id, city.lat, city.lng, places]);
+  }, [city.defaultZoom, city.id, city.lat, city.lng, places]);
 
   useEffect(() => {
     markerElementsRef.current.forEach((element, placeId) => {
@@ -166,6 +166,9 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
                 <span className={`truncate text-sm ${active ? "text-zinc-300" : "text-zinc-500"}`}>
                   {formatPlacePriceForUnit(place, priceUnit)}
                 </span>
+                <span className={`truncate text-xs ${active ? "text-zinc-400" : "text-zinc-400"}`}>
+                  Laptop: {place.laptopPolicy.availability}
+                </span>
               </button>
             );
           })}
@@ -182,6 +185,10 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
               <p className="mt-3 text-sm font-medium text-zinc-950">
                 {formatPlacePriceForUnit(selectedPlace, priceUnit)}
               </p>
+              <div className="mt-3 border-l-2 border-accent/40 pl-3">
+                <p className="text-sm font-semibold text-zinc-950">Laptop: {selectedPlace.laptopPolicy.availability}</p>
+                <p className="mt-1 text-sm leading-6 text-zinc-600">{selectedPlace.laptopPolicy.details}</p>
+              </div>
               <p className="mt-2 flex items-center gap-2 text-sm text-zinc-600">
                 {selectedPlace.averageRating ? (
                   <>
@@ -201,7 +208,7 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
                   {selectedPlace.offers.slice(0, 4).map((offer) => (
                     <li className="flex items-center justify-between gap-4 px-3 py-2 text-sm" key={offer.id}>
                       <span className="text-zinc-600">{offer.label}</span>
-                      <span className="font-medium text-zinc-950">{formatOfferPrice(offer, selectedPlace.price_currency)}</span>
+                      <span className="font-medium text-zinc-950">{formatOfferPrice(offer, selectedPlace.priceCurrency)}</span>
                     </li>
                   ))}
                 </ul>
@@ -215,7 +222,7 @@ export function MapView({ city, places, priceUnit }: MapViewProps) {
             <div className="flex flex-wrap gap-2">
               <a
                 className="inline-flex h-10 items-center gap-2 rounded-md border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-900 transition hover:border-zinc-950"
-                href={selectedPlace.website_url}
+                href={selectedPlace.websiteUrl}
                 rel="noreferrer"
                 target="_blank"
               >

@@ -1,3 +1,4 @@
+import { formatLastUpdatedAt } from "../lib/loadData";
 import type { SiteConfig } from "../lib/types";
 
 interface FooterProps {
@@ -12,18 +13,19 @@ export function Footer({ config }: FooterProps) {
           Built with <span aria-label="love">♥</span> by{" "}
           <a
             className="font-medium text-zinc-950 underline-offset-4 hover:underline"
-            href={config.author.linkedin_url}
+            href={config.author.linkedinUrl}
             rel="noreferrer"
             target="_blank"
           >
             {config.author.name}
           </a>
         </p>
+        <p>Updated {formatLastUpdatedAt(config.lastUpdatedAt)}</p>
         <p className="flex gap-3">
-          <a className="underline-offset-4 hover:text-zinc-950 hover:underline" href={config.author.linkedin_url} rel="noreferrer" target="_blank">
+          <a className="underline-offset-4 hover:text-zinc-950 hover:underline" href={config.author.linkedinUrl} rel="noreferrer" target="_blank">
             LinkedIn
           </a>
-          <a className="underline-offset-4 hover:text-zinc-950 hover:underline" href={config.author.github_url} rel="noreferrer" target="_blank">
+          <a className="underline-offset-4 hover:text-zinc-950 hover:underline" href={config.author.githubUrl} rel="noreferrer" target="_blank">
             GitHub
           </a>
         </p>

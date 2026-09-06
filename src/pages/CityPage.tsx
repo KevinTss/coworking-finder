@@ -7,7 +7,7 @@ import { MapView } from "../components/MapView";
 import { MobileMapExperience } from "../components/MobileMapExperience";
 import { PlaceList } from "../components/PlaceList";
 import { ViewModeToggle, type ViewMode } from "../components/ViewModeToggle";
-import { defaultPriceUnit, getData, getPlacePriceForUnit, type PriceUnit } from "../lib/loadData";
+import { defaultPriceUnit, formatLastUpdatedAt, getData, getPlacePriceForUnit, type PriceUnit } from "../lib/loadData";
 import type { EnrichedPlace } from "../lib/types";
 
 const data = getData();
@@ -22,7 +22,14 @@ function matchesSearch(place: EnrichedPlace, query: string) {
     return true;
   }
 
-  const haystack = [place.name, place.address, place.type.label, ...place.tags.map((tag) => tag.label)]
+  const haystack = [
+    place.name,
+    place.address,
+    place.type.label,
+    place.laptopPolicy.availability,
+    place.laptopPolicy.details,
+    ...place.tags.map((tag) => tag.label)
+  ]
     .join(" ")
     .toLowerCase();
 
@@ -45,11 +52,11 @@ function useIsMobile() {
 }
 
 export function CityPage() {
-  const { citySlug = data.config.default_city } = useParams();
+  const { citySlug = data.config.defaultCity } = useParams();
   const navigate = useNavigate();
   const city = data.cities.find((candidate) => candidate.id === citySlug);
   const cityPlaces = useMemo(
-    () => data.places.filter((place) => place.city_id === citySlug),
+    () => data.places.filter((place) => place.cityId === citySlug),
     [citySlug]
   );
   const [filters, setFilters] = useState<FilterState>(() => ({
@@ -91,7 +98,7 @@ export function CityPage() {
     const priceFilterIsActive = filters.maxPrice < maxPrice;
 
     return cityPlaces.filter((place) => {
-      const matchesType = filters.typeId === "all" || place.type_id === filters.typeId;
+      const matchesType = filters.typeId === "all" || place.typeId === filters.typeId;
       const placePrice = getPlacePriceForUnit(place, filters.priceUnit);
       const matchesPrice =
         !priceFilterIsActive ||
@@ -108,10 +115,10 @@ export function CityPage() {
         <h1 className="mt-3 text-3xl font-semibold tracking-normal text-zinc-950">No data for {citySlug}</h1>
         <button
           className="mt-6 w-fit rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:border-zinc-950"
-          onClick={() => navigate(`/${data.config.default_city}`)}
+          onClick={() => navigate(`/${data.config.defaultCity}`)}
           type="button"
         >
-          Open {data.config.default_city}
+          Open {data.config.defaultCity}
         </button>
       </section>
     );
@@ -122,6 +129,7 @@ export function CityPage() {
     (filters.typeId !== "all" ? 1 : 0) +
     (filters.priceUnit !== defaultPriceUnit ? 1 : 0) +
     (filters.maxPrice < maxPrice ? 1 : 0);
+  const lastUpdatedLabel = formatLastUpdatedAt(data.config.lastUpdatedAt);
 
   return (
     <>
@@ -132,7 +140,7 @@ export function CityPage() {
           onFilterClick={() => setIsFilterSheetOpen(true)}
           places={filteredPlaces}
           priceUnit={filters.priceUnit}
-          siteTitle={data.config.site_title}
+          siteTitle={data.config.siteTitle}
           totalCount={cityPlaces.length}
         />
       ) : null}
@@ -141,8 +149,9 @@ export function CityPage() {
         <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6 py-5 lg:px-8">
           <header className="grid gap-x-3 gap-y-0 border-b border-zinc-200 pb-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
             <h1 className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 text-2xl font-semibold tracking-normal text-zinc-950 lg:text-3xl">
-              <span className="whitespace-nowrap">{data.config.site_title}</span>
+              <span className="whitespace-nowrap">{data.config.siteTitle}</span>
               <span className="text-sm font-medium text-accent">{city.name}, {city.country}</span>
+              <span className="text-xs font-medium text-zinc-400">Updated {lastUpdatedLabel}</span>
             </h1>
 
             <FilterBar

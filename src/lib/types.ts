@@ -1,78 +1,126 @@
-export type OfferUnit = "hour" | "half_day" | "day" | "week" | "month";
+export const CityId = {
+  Lyon: "lyon"
+} as const;
+
+export type CityId = (typeof CityId)[keyof typeof CityId];
+
+export const PlaceTypeId = {
+  Cafe: "cafe",
+  Coworking: "coworking"
+} as const;
+
+export type PlaceTypeId = (typeof PlaceTypeId)[keyof typeof PlaceTypeId];
+
+export const OfferUnit = {
+  Day: "day",
+  HalfDay: "half_day",
+  Hour: "hour",
+  Month: "month",
+  Week: "week"
+} as const;
+
+export type OfferUnit = (typeof OfferUnit)[keyof typeof OfferUnit];
+
+export const TagId = {
+  CoffeeIncluded: "coffee-included",
+  DayPass: "day-pass",
+  HighSpeedWifi: "high-speed-wifi",
+  LaptopFriendly: "laptop-friendly",
+  MeetingRooms: "meeting-rooms",
+  MinimumSpend: "minimum-spend",
+  Open247: "open-24-7",
+  Outlets: "outlets",
+  PhoneBox: "phone-box",
+  StudentFriendly: "student-friendly",
+  Terrace: "terrace",
+  WeekdayLaptop: "weekday-laptop",
+  WeekendLaptop: "weekend-laptop"
+} as const;
+
+export type TagId = (typeof TagId)[keyof typeof TagId];
 
 export interface City {
-  id: string;
+  id: CityId;
   name: string;
   country: string;
   lat: number;
   lng: number;
-  default_zoom: number;
+  defaultZoom: number;
 }
 
 export interface PlaceType {
-  id: string;
+  id: PlaceTypeId;
   label: string;
   icon: string;
 }
 
-export interface Place {
-  id: string;
-  city_id: string;
-  name: string;
-  type_id: string;
-  address: string;
-  lat: number;
-  lng: number;
-  website_url: string;
-  price_monthly_estimate: number | null;
-  price_currency: string;
-  notes: string | null;
+export interface LaptopPolicy {
+  availability: string;
+  details: string;
 }
 
 export interface Offer {
   id: string;
-  place_id: string;
   label: string;
   price: number;
   unit: OfferUnit;
 }
 
 export interface Tag {
-  id: string;
+  id: TagId;
   label: string;
-}
-
-export interface PlaceTag {
-  place_id: string;
-  tag_id: string;
 }
 
 export interface Review {
   id: string;
-  place_id: string;
-  tester_name: string;
-  tester_link: string | null;
+  testerName: string;
+  testerLink: string | null;
   rating: number | null;
   comment: string;
   date: string;
 }
 
+export interface Place {
+  id: string;
+  cityId: CityId;
+  name: string;
+  typeId: PlaceTypeId;
+  address: string;
+  lat: number;
+  lng: number;
+  websiteUrl: string;
+  priceMonthlyEstimate: number | null;
+  priceCurrency: string;
+  laptopPolicy: LaptopPolicy;
+  notes: string | null;
+  offers: Offer[];
+  reviews: Review[];
+  tagIds: TagId[];
+}
+
 export interface SiteConfig {
-  site_title: string;
-  default_city: string;
+  siteTitle: string;
+  defaultCity: CityId;
+  lastUpdatedAt: string;
   author: {
     name: string;
-    linkedin_url: string;
-    github_url: string;
+    linkedinUrl: string;
+    githubUrl: string;
   };
+}
+
+export interface CoworkingData {
+  config: SiteConfig;
+  cities: City[];
+  placeTypes: PlaceType[];
+  tags: Tag[];
+  places: Place[];
 }
 
 export interface EnrichedPlace extends Place {
   city: City;
   type: PlaceType;
-  offers: Offer[];
   tags: Tag[];
-  reviews: Review[];
   averageRating: number | null;
   cheapestOffer: Offer | null;
 }

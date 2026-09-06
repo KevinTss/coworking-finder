@@ -21,6 +21,10 @@ export function PlaceDetail({ place }: PlaceDetailProps) {
               </span>
             ))}
           </div>
+          <div className="mt-4 border-l-2 border-accent/40 pl-3">
+            <p className="text-sm font-semibold text-zinc-950">Laptop: {place.laptopPolicy.availability}</p>
+            <p className="mt-1 text-sm leading-6 text-zinc-600">{place.laptopPolicy.details}</p>
+          </div>
           {place.notes ? <p className="mt-3 text-sm leading-6 text-zinc-600">{place.notes}</p> : null}
         </div>
 
@@ -33,7 +37,7 @@ export function PlaceDetail({ place }: PlaceDetailProps) {
               {place.offers.map((offer) => (
                 <li className="flex items-center justify-between gap-4 px-3 py-2 text-sm" key={offer.id}>
                   <span className="text-zinc-600">{offer.label}</span>
-                  <span className="font-medium text-zinc-950">{formatOfferPrice(offer, place.price_currency)}</span>
+                  <span className="font-medium text-zinc-950">{formatOfferPrice(offer, place.priceCurrency)}</span>
                 </li>
               ))}
             </ul>
@@ -50,7 +54,7 @@ export function PlaceDetail({ place }: PlaceDetailProps) {
         <div className="flex flex-wrap gap-2">
           <a
             className="inline-flex h-10 items-center gap-2 rounded-md border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-900 transition hover:border-zinc-950"
-            href={place.website_url}
+            href={place.websiteUrl}
             rel="noreferrer"
             target="_blank"
           >

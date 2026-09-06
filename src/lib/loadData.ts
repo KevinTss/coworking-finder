@@ -1,34 +1,19 @@
-import cities from "../../data/cities.json";
-import offers from "../../data/offers.json";
-import placeTags from "../../data/place_tags.json";
-import placeTypes from "../../data/place_types.json";
-import places from "../../data/places.json";
-import reviews from "../../data/reviews.json";
-import siteConfig from "../../data/site_config.json";
-import tags from "../../data/tags.json";
+import { coworkingData } from "../data/coworkingData";
 
-import type { City, DataSet, EnrichedPlace, Offer, Place, PlaceTag, PlaceType, Review, SiteConfig, Tag } from "./types";
+import { OfferUnit, type DataSet, type EnrichedPlace, type Offer, type Review, type Tag } from "./types";
 
-export type PriceUnit = Extract<Offer["unit"], "hour" | "day" | "month">;
+export type PriceUnit = Extract<Offer["unit"], typeof OfferUnit.Hour | typeof OfferUnit.Day | typeof OfferUnit.Month>;
 
-export const defaultPriceUnit: PriceUnit = "day";
+export const defaultPriceUnit: PriceUnit = OfferUnit.Day;
 
 export const priceUnitOptions: Array<{ id: PriceUnit; label: string; shortLabel: string }> = [
-  { id: "hour", label: "Per hour", shortLabel: "Hour" },
-  { id: "day", label: "Per day", shortLabel: "Day" },
-  { id: "month", label: "Per month", shortLabel: "Month" }
+  { id: OfferUnit.Hour, label: "Per hour", shortLabel: "Hour" },
+  { id: OfferUnit.Day, label: "Per day", shortLabel: "Day" },
+  { id: OfferUnit.Month, label: "Per month", shortLabel: "Month" }
 ];
 
 function byId<T extends { id: string }>(rows: T[]) {
   return new Map(rows.map((row) => [row.id, row]));
-}
-
-function groupBy<T>(rows: T[], getKey: (row: T) => string) {
-  return rows.reduce<Map<string, T[]>>((groups, row) => {
-    const key = getKey(row);
-    groups.set(key, [...(groups.get(key) ?? []), row]);
-    return groups;
-  }, new Map());
 }
 
 function getAverageRating(placeReviews: Review[]) {
@@ -48,46 +33,35 @@ function getCheapestOffer(placeOffers: Offer[]) {
   return [...placeOffers].sort((a, b) => a.price - b.price)[0] ?? null;
 }
 
-const cityRows = cities as City[];
-const placeTypeRows = placeTypes as PlaceType[];
-const placeRows = places as Place[];
-const offerRows = offers as Offer[];
-const tagRows = tags as Tag[];
-const placeTagRows = placeTags as PlaceTag[];
-const reviewRows = reviews as Review[];
-const config = siteConfig as SiteConfig;
+const cityRows = coworkingData.cities;
+const placeTypeRows = coworkingData.placeTypes;
+const placeRows = coworkingData.places;
+const tagRows = coworkingData.tags;
+const config = coworkingData.config;
 
 const citiesById = byId(cityRows);
 const typesById = byId(placeTypeRows);
 const tagsById = byId(tagRows);
-const offersByPlace = groupBy(offerRows, (offer) => offer.place_id);
-const reviewsByPlace = groupBy(reviewRows, (review) => review.place_id);
-const tagIdsByPlace = groupBy(placeTagRows, (placeTag) => placeTag.place_id);
 
 const enrichedPlaces: EnrichedPlace[] = placeRows.map((place) => {
-  const city = citiesById.get(place.city_id);
-  const type = typesById.get(place.type_id);
+  const city = citiesById.get(place.cityId);
+  const type = typesById.get(place.typeId);
 
   if (!city || !type) {
     throw new Error(`Invalid data relationship for place "${place.id}"`);
   }
 
-  const placeOffers = offersByPlace.get(place.id) ?? [];
-  const placeReviews = reviewsByPlace.get(place.id) ?? [];
-  const placeTagIds = tagIdsByPlace.get(place.id) ?? [];
-  const placeTagRows = placeTagIds
-    .map((placeTag) => tagsById.get(placeTag.tag_id))
+  const placeTagRows = place.tagIds
+    .map((tagId) => tagsById.get(tagId))
     .filter((tag): tag is Tag => Boolean(tag));
-  const cheapestOffer = getCheapestOffer(placeOffers);
+  const cheapestOffer = getCheapestOffer(place.offers);
 
   return {
     ...place,
     city,
     type,
-    offers: placeOffers,
-    reviews: placeReviews,
     tags: placeTagRows,
-    averageRating: getAverageRating(placeReviews),
+    averageRating: getAverageRating(place.reviews),
     cheapestOffer
   };
 });
@@ -112,13 +86,24 @@ export function formatCurrency(value: number, currency = "EUR") {
   }).format(value);
 }
 
+export function formatLastUpdatedAt(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+}
+
 export function formatOfferUnit(unit: Offer["unit"]) {
   const units: Record<Offer["unit"], string> = {
-    hour: "/h",
-    half_day: "/half-day",
-    day: "/day",
-    week: "/week",
-    month: "/month"
+    [OfferUnit.Hour]: "/h",
+    [OfferUnit.HalfDay]: "/half-day",
+    [OfferUnit.Day]: "/day",
+    [OfferUnit.Week]: "/week",
+    [OfferUnit.Month]: "/month"
   };
 
   return units[unit];
@@ -139,8 +124,8 @@ export function getPlacePriceForUnit(place: EnrichedPlace, unit: PriceUnit) {
     return offer.price;
   }
 
-  if (unit === "month" && typeof place.price_monthly_estimate === "number") {
-    return place.price_monthly_estimate;
+  if (unit === OfferUnit.Month && typeof place.priceMonthlyEstimate === "number") {
+    return place.priceMonthlyEstimate;
   }
 
   return null;
@@ -150,11 +135,11 @@ export function formatPlacePriceForUnit(place: EnrichedPlace, unit: PriceUnit) {
   const offer = getOfferForUnit(place, unit);
 
   if (offer) {
-    return formatOfferPrice(offer, place.price_currency);
+    return formatOfferPrice(offer, place.priceCurrency);
   }
 
-  if (unit === "month" && typeof place.price_monthly_estimate === "number") {
-    return `${formatCurrency(place.price_monthly_estimate, place.price_currency)} /month`;
+  if (unit === OfferUnit.Month && typeof place.priceMonthlyEstimate === "number") {
+    return `${formatCurrency(place.priceMonthlyEstimate, place.priceCurrency)} /month`;
   }
 
   const missingLabels: Record<PriceUnit, string> = {
@@ -168,11 +153,11 @@ export function formatPlacePriceForUnit(place: EnrichedPlace, unit: PriceUnit) {
 
 export function formatPlacePrice(place: EnrichedPlace) {
   if (place.cheapestOffer) {
-    return `From ${formatOfferPrice(place.cheapestOffer, place.price_currency)}`;
+    return `From ${formatOfferPrice(place.cheapestOffer, place.priceCurrency)}`;
   }
 
-  if (typeof place.price_monthly_estimate === "number") {
-    return `From ${formatCurrency(place.price_monthly_estimate, place.price_currency)} /month`;
+  if (typeof place.priceMonthlyEstimate === "number") {
+    return `From ${formatCurrency(place.priceMonthlyEstimate, place.priceCurrency)} /month`;
   }
 
   return "Price not listed";
