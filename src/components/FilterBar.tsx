@@ -1,7 +1,7 @@
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Building2, CalendarDays, CalendarRange, Clock3, Coffee, LayoutGrid, Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-import { defaultPriceUnit, formatCurrency, priceUnitOptions, type PriceUnit } from "../lib/loadData";
+import { defaultPriceUnit, formatCurrency, type PriceUnit } from "../lib/loadData";
 import type { PlaceType, PlaceTypeId } from "../lib/types";
 
 export interface FilterState {
@@ -18,6 +18,76 @@ interface FilterBarProps {
   onChange: (filters: FilterState) => void;
   placeTypes: PlaceType[];
   trailing?: ReactNode;
+}
+
+interface SegmentedOption<T extends string> {
+  id: T;
+  icon: ReactNode;
+  label: string;
+  tooltip: string;
+}
+
+function SegmentedToggle<T extends string>({
+  ariaLabel,
+  onChange,
+  options,
+  value,
+  variant
+}: {
+  ariaLabel: string;
+  onChange: (value: T) => void;
+  options: Array<SegmentedOption<T>>;
+  value: T;
+  variant: "inline" | "sheet";
+}) {
+  const activeIndex = Math.max(0, options.findIndex((option) => option.id === value));
+  const optionCount = options.length;
+
+  return (
+    <div
+      aria-label={ariaLabel}
+      className={`relative grid shrink-0 rounded-full border border-zinc-200 bg-zinc-100 p-1 text-zinc-500 shadow-inner ${
+        variant === "sheet" ? "h-12 w-full" : "h-9 w-[250px]"
+      }`}
+      role="group"
+      style={{ gridTemplateColumns: `repeat(${optionCount}, minmax(0, 1fr))` }}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute bottom-1 left-1 top-1 rounded-full bg-white shadow-sm transition-transform duration-200 ease-out"
+        style={{
+          transform: `translateX(${activeIndex * 100}%)`,
+          width: `calc((100% - 0.5rem) / ${optionCount})`
+        }}
+      />
+      {options.map((option) => {
+        const active = option.id === value;
+
+        return (
+          <button
+            aria-label={option.tooltip}
+            aria-pressed={active}
+            className={`group relative z-10 inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-accent/20 ${
+              variant === "sheet" ? "h-10 px-2" : "h-7 px-2"
+            } ${active ? "text-zinc-950" : "text-zinc-400 hover:text-zinc-700"}`}
+            key={option.id}
+            onClick={() => onChange(option.id)}
+            title={option.tooltip}
+            type="button"
+          >
+            <span className="grid h-4 w-4 shrink-0 place-items-center">{option.icon}</span>
+            <span className="truncate">{option.label}</span>
+            <span
+              className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-950 px-2 py-1 text-xs font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100"
+              role="tooltip"
+            >
+              {option.tooltip}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 export function FilterBar({ filters, layout = "desktop", maxPrice, onChange, placeTypes, trailing }: FilterBarProps) {
@@ -50,64 +120,66 @@ export function FilterBar({ filters, layout = "desktop", maxPrice, onChange, pla
     }
   }, [isSearchOpen]);
 
-  const typeOptions: Array<{ id: PlaceTypeId | "all"; label: string; icon: string }> = [
-    { id: "all", label: "All", icon: "" },
-    ...placeTypes
+  const typeOptions: Array<SegmentedOption<PlaceTypeId | "all">> = [
+    {
+      id: "all",
+      icon: <LayoutGrid aria-hidden="true" className="h-4 w-4" />,
+      label: "All",
+      tooltip: "Show all place types"
+    },
+    ...placeTypes.map((type) => ({
+      id: type.id,
+      icon:
+        type.id === "coworking" ? (
+          <Building2 aria-hidden="true" className="h-4 w-4" />
+        ) : (
+          <Coffee aria-hidden="true" className="h-4 w-4" />
+        ),
+      label: type.id === "coworking" ? "Coworking" : "Café",
+      tooltip: `Show only ${type.label.toLowerCase()}`
+    }))
   ];
   const priceStep = filters.priceUnit === "month" ? 25 : 5;
   const selectedMaxPrice = Math.min(filters.maxPrice, maxPrice);
+  const priceOptions: Array<SegmentedOption<PriceUnit>> = [
+    {
+      id: "hour",
+      icon: <Clock3 aria-hidden="true" className="h-4 w-4" />,
+      label: "Hour",
+      tooltip: "Show hourly prices"
+    },
+    {
+      id: "day",
+      icon: <CalendarDays aria-hidden="true" className="h-4 w-4" />,
+      label: "Day",
+      tooltip: "Show day prices"
+    },
+    {
+      id: "month",
+      icon: <CalendarRange aria-hidden="true" className="h-4 w-4" />,
+      label: "Month",
+      tooltip: "Show monthly prices"
+    }
+  ];
 
   const renderPriceUnitButtons = (variant: "inline" | "sheet") => (
-    <div className={variant === "sheet" ? "grid grid-cols-3 gap-1" : "inline-flex h-9 items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 p-0.5"}>
-      {priceUnitOptions.map((unit) => {
-        const active = filters.priceUnit === unit.id;
-
-        return (
-          <button
-            aria-pressed={active}
-            className={`rounded text-sm font-medium transition ${
-              variant === "sheet" ? "h-10 px-3" : "h-8 px-3"
-            } ${
-              active
-                ? "bg-zinc-950 text-white shadow-sm"
-                : "text-zinc-500 hover:bg-white hover:text-zinc-950"
-            }`}
-            key={unit.id}
-            onClick={() => update({ priceUnit: unit.id })}
-            type="button"
-          >
-            {variant === "sheet" ? unit.shortLabel : unit.label}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedToggle
+      ariaLabel="Price frequency"
+      onChange={(priceUnit) => update({ priceUnit })}
+      options={priceOptions}
+      value={filters.priceUnit}
+      variant={variant}
+    />
   );
 
   const renderTypeButtons = (variant: "inline" | "sheet") => (
-    <div className={variant === "sheet" ? "grid grid-cols-2 gap-1" : "inline-flex h-9 items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 p-0.5"}>
-      {typeOptions.map((type) => {
-        const active = filters.typeId === type.id;
-
-        return (
-          <button
-            aria-pressed={active}
-            className={`whitespace-nowrap rounded text-sm font-medium transition ${
-              variant === "sheet" ? "h-10 px-3" : "h-8 px-3"
-            } ${
-              active
-                ? "bg-zinc-950 text-white shadow-sm"
-                : "text-zinc-500 hover:bg-white hover:text-zinc-950"
-            }`}
-            key={type.id}
-            onClick={() => update({ typeId: type.id })}
-            type="button"
-          >
-            {type.icon ? `${type.icon} ` : ""}
-            {type.label}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedToggle
+      ariaLabel="Place type"
+      onChange={(typeId) => update({ typeId })}
+      options={typeOptions}
+      value={filters.typeId}
+      variant={variant}
+    />
   );
 
   const renderPriceRange = (variant: "inline" | "sheet") => (
@@ -242,7 +314,7 @@ export function FilterBar({ filters, layout = "desktop", maxPrice, onChange, pla
             : "pointer-events-none grid-rows-[0fr] opacity-0"
         }`}
       >
-        <div className="min-h-0 overflow-hidden">
+        <div className={`min-h-0 ${isFilterPanelOpen ? "overflow-visible" : "overflow-hidden"}`}>
           <div className="mt-3 flex w-full flex-wrap items-center gap-3 border-t border-zinc-200/80 pt-3">
             {renderPriceUnitButtons("inline")}
             {renderTypeButtons("inline")}
