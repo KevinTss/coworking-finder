@@ -4,7 +4,7 @@ export const coworkingData = {
   config: {
     siteTitle: "Coworking Finder",
     defaultCity: CityId.Lyon,
-    lastUpdatedAt: "2026-09-05",
+    lastUpdatedAt: "2026-10-01",
     author: {
       name: "Kevin Tassi",
       linkedinUrl: "https://www.linkedin.com/in/kevin-tassi/",
@@ -276,39 +276,6 @@ export const coworkingData = {
       ],
       reviews: [],
       tagIds: [TagId.Open247, TagId.Terrace, TagId.MeetingRooms, TagId.LaptopFriendly]
-    },
-    {
-      id: "sofffa-terreaux",
-      cityId: CityId.Lyon,
-      name: "Sofffa Terreaux",
-      typeId: PlaceTypeId.Cafe,
-      address: "17 rue Sainte-Catherine, 69001 Lyon",
-      lat: 45.76827,
-      lng: 4.83392,
-      websiteUrl: "https://sofffa.com/",
-      priceMonthlyEstimate: null,
-      priceCurrency: "EUR",
-      laptopPolicy: {
-        availability: "Every day",
-        details: "Slow-cafe workspace model; laptop access follows the captured time-based offers."
-      },
-      notes: "Slow-cafe pricing is modeled through offers. Verify current rates before relying on them operationally.",
-      offers: [
-        {
-          id: "sofffa-terreaux-hour",
-          label: "First hour",
-          price: 6,
-          unit: OfferUnit.Hour
-        },
-        {
-          id: "sofffa-terreaux-day",
-          label: "Day pass",
-          price: 24,
-          unit: OfferUnit.Day
-        }
-      ],
-      reviews: [],
-      tagIds: [TagId.DayPass, TagId.CoffeeIncluded, TagId.LaptopFriendly]
     },
     {
       id: "patchwork-cafe",
@@ -603,45 +570,6 @@ export const coworkingData = {
       ],
       reviews: [],
       tagIds: [TagId.LaptopFriendly, TagId.WeekendLaptop, TagId.MinimumSpend, TagId.Outlets]
-    },
-    {
-      id: "anticafe-lyon",
-      cityId: CityId.Lyon,
-      name: "Anticafé Lyon",
-      typeId: PlaceTypeId.Cafe,
-      address: "9 rue du Bât d'Argent, 69001 Lyon",
-      lat: 45.7661653,
-      lng: 4.835313,
-      websiteUrl: "https://www.anticafe.eu/lyon",
-      priceMonthlyEstimate: 260,
-      priceCurrency: "EUR",
-      laptopPolicy: {
-        availability: "Every day",
-        details: "Time-based cafe-coworking model with hourly, day, and monthly rates."
-      },
-      notes: "Coworking Lyon lists hourly, day, and monthly prices for Anticafe Lyon.",
-      offers: [
-        {
-          id: "anticafe-lyon-hour",
-          label: "Hourly access",
-          price: 6,
-          unit: OfferUnit.Hour
-        },
-        {
-          id: "anticafe-lyon-day",
-          label: "Day access",
-          price: 26,
-          unit: OfferUnit.Day
-        },
-        {
-          id: "anticafe-lyon-month",
-          label: "Monthly access",
-          price: 260,
-          unit: OfferUnit.Month
-        }
-      ],
-      reviews: [],
-      tagIds: [TagId.LaptopFriendly, TagId.WeekendLaptop, TagId.DayPass]
     }
   ]
 } satisfies CoworkingData;
